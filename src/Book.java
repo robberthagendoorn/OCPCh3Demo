@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Book implements Comparable {
+public class Book implements Comparable<Book> {
 	private String author;
 	private String name;
 
@@ -42,7 +42,7 @@ public class Book implements Comparable {
 	}
 
 	@Override
-	public int compareTo(Object book) {
+	public int compareTo(Book book) {
 		return this.toString().compareTo(book.toString());
 	}		 
 }

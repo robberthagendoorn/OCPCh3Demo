@@ -21,21 +21,16 @@ public class CollectionHelper {
 		}
 	}
 
-	public static Collection<Book> addBooksToCollection(Collection<Book> collection, int numberOfBooks) {
+	public static Collection<Book> addBooksToCollection(Collection<Book> collection) {
 		startTimedEvent(collection, a -> generateBooks(a));
 		return collection;
 	}
 
-	public static void sortTimedEvent(Collection<Book> collection) {
+	public static void sortAndDistinctTimedEvent(Collection<Book> collection) {
 		if (collection instanceof Set) return;
-		startTimedEvent(collection, a -> sortCollection(a)); 
+		startTimedEvent(collection, a -> sortAndDistinctCollection(a)); 
 	}
-	
-	public static void removeDuplicatesTimedEvent(Collection<Book> collection) {
-		if (collection instanceof Set) return;
-		startTimedEvent(collection, a -> removeDuplicates(a));
-	}	
-	
+
 	public static void getRandomIndexTimedEvent(Collection<Book> collection) {
 		startTimedEvent(collection, a -> getRandomIndex(a));
 	}
@@ -56,25 +51,20 @@ public class CollectionHelper {
 		Stream.generate(Book::generateBook).limit(100000).forEach(collection::add);
 	}
 
-	private static void sortCollection(Collection<Book> collection) {
-		View.print("Sorting collection in:"); 
-		collection.stream().sorted().collect(Collectors.toList());
-	}
-
-	private static void removeDuplicates(Collection<Book> collection) {
-		View.print("Removing duplicates in:");
-		collection.stream().distinct().collect(Collectors.toList());
+	private static void sortAndDistinctCollection(Collection<Book> collection) {
+		View.print("Sorting collection and getting distinct in:"); 
+		collection.stream().sorted().distinct().collect(Collectors.toList());
 	}
 
 	private static void getRandomIndex(Collection<Book> collection) {
-		int it = 100000;
+		int count = 100000;
 		Random rand = new Random();
 		View.print("Getting random indexes in:");
 		if (collection instanceof List) {
 			List<Book> list = (List<Book>) collection;
-			IntStream.generate(() -> rand.nextInt(list.size())).limit(it).forEach(list::get);
+			IntStream.generate(() -> rand.nextInt(list.size())).limit(count).forEach(list::get);
 		} else {
-			for (int i = 0; i < it; i++) {
+			for (int i = 0; i < count; ++i) {
 				int r = rand.nextInt(collection.size());
 				collection.stream().skip(r).findFirst(); 
 			}
@@ -83,8 +73,8 @@ public class CollectionHelper {
 
 	private static void search(Collection<Book> collection) {
 		View.print("Searching random books in:");
-		int it = 100000;
-		for (int i = 0; i < it; i++) { 
+		int count = 100000;
+		for (int i = 0; i < count; i++) { 
 			Book book = Book.generateBook();
 			collection.stream().filter(a -> a.equals(book)).findFirst();
 		}
