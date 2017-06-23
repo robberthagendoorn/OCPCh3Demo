@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Controller {
 	private View view;
-	private static final int numberOfBooks = 100000;
+	private static final int numberOfBooks = 1000000;
 
 	public Controller(View view) {
 		this.view = view;
@@ -19,9 +19,10 @@ public class Controller {
 
 	private void processCollection(Collection<Book> collection) {
 		CollectionHelper.addBooksToCollection(collection, numberOfBooks);
-		CollectionHelper.sortCollection(collection);
-		//CollectionHelper.removeDuplicates(collection);	
-		//view.displayBooks(collection);
+		CollectionHelper.removeDuplicatesTimedEvent(collection);	
+		CollectionHelper.sortTimedEvent(collection);
+		CollectionHelper.getRandomIndexTimedEvent(collection);
+		CollectionHelper.searchTimedEvent(collection);
 	}
 }  
 
