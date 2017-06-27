@@ -62,22 +62,30 @@ public class CollectionHelper {
 		View.print("Getting random indexes in:");
 		if (collection instanceof List) {
 			List<Book> list = (List<Book>) collection;
-			IntStream.generate(() -> rand.nextInt(list.size())).limit(count).forEach(list::get);
+			IntStream.generate(() -> rand.nextInt(list.size()))
+			         .limit(count)
+					 .forEach(list::get);
 		} else {
-			for (int i = 0; i < count; ++i) {
-				int r = rand.nextInt(collection.size());
-				collection.stream().skip(r).findFirst(); 
-			}
+			IntStream.generate(() -> rand.nextInt(collection.size()))
+					 .limit(count)
+					 .forEach(a -> findIndex(collection, a));
 		}
+	}
+
+	private static void findIndex(Collection<Book> collection, int index) {
+		collection.stream().skip(index).findFirst(); 
 	}
 
 	private static void search(Collection<Book> collection) {
 		View.print("Searching random books in:");
 		int count = 100000;
-		for (int i = 0; i < count; i++) { 
-			Book book = Book.generateBook();
-			collection.stream().filter(a -> a.equals(book)).findFirst();
-		}
+		Stream.generate(() -> Book.generateBook())
+			  .limit(count)
+			  .forEach( a -> findBook(collection, a));
+	}
+
+	private static void findBook(Collection<Book> collection, Book book) {
+		collection.stream().filter(a -> a.equals(book)).findFirst();
 	}	
 }
 
